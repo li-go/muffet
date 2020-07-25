@@ -85,7 +85,11 @@ func (f fetcher) sendRequest(u string) (fetchResult, error) {
 	req.SetConnectionClose()
 
 	for k, v := range f.options.Headers {
-		req.Header.Add(k, v)
+		if strings.ToLower(k) == strings.ToLower(fasthttp.HeaderUserAgent) {
+			req.Header.SetUserAgent(v)
+		} else {
+			req.Header.Add(k, v)
+		}
 	}
 
 	r := 0
